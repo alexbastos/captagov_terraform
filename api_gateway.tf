@@ -7,9 +7,10 @@ resource "aws_apigatewayv2_api" "http_api" {
   description   = "API Gateway for Identity Provider and Microservices"
 
   cors_configuration {
-    allow_origins = ["*"] # Em produção, defina o domínio exato do frontend
-    allow_methods = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-    allow_headers = ["Content-Type", "Authorization"]
+    allow_origins     = ["https://d3hxgfwn86i4hl.cloudfront.net", "http://localhost:5173", "http://localhost:3000", "http://localhost:3001"]
+    allow_methods     = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    allow_headers     = ["Content-Type", "Authorization"]
+    allow_credentials = true
   }
 }
 
