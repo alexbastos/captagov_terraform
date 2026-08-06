@@ -1,0 +1,23 @@
+terraform {
+  required_version = ">= 1.5.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = var.aws_region
+}
+
+variable "aws_region" {
+  default     = "us-east-1"
+  description = "Região da AWS"
+}
+
+variable "environment" {
+  default     = "dev"
+  description = "Ambiente da aplicação"
+}
