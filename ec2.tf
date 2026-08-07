@@ -70,13 +70,56 @@ resource "aws_security_group" "ec2_sg" {
   }
 }
 
-# 4. Instância EC2
+# 4. IAM Role para a EC2 (Acesso ao SES)
+resource "aws_iam_role" "ec2_role" {
+  name = "auth-api-ec2-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "ses_policy" {
+  name = "auth-api-ses-policy"
+  role = aws_iam_role.ec2_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ses:SendEmail",
+          "ses:SendRawEmail"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_instance_profile" "ec2_profile" {
+  name = "auth-api-ec2-profile"
+  role = aws_iam_role.ec2_role.name
+}
+
+# 5. Instância EC2
 resource "aws_instance" "app_server" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.micro" # 2 vCPU, 1GB RAM (Elegível ao Free Tier da AWS)
 
   key_name               = aws_key_pair.ec2_key.key_name
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+  iam_instance_profile   = aws_iam_instance_profile.ec2_profile.name
 
   # Tamanho do disco (20GB SSD)
   root_block_device {
@@ -129,6 +172,9 @@ resource "aws_instance" "app_server" {
               REDIS_HOST=redis
               REDIS_PORT=6379
               JWT_ISSUER=http://$PUBLIC_IP:3000/authentication_api/api/v1/auth
+              APP_URL=https://d1f5n4355y8u52.cloudfront.net
+              EMAIL_PROVIDER=ses
+              EMAIL_FROM_ADDRESS=capcodesolucoes@gmail.com
               EOT
 
               # 5. Subir os contêineres via Docker Compose
