@@ -168,13 +168,13 @@ resource "aws_instance" "app_server" {
 
               # (Opcional) Criar o arquivo .env com as variáveis de ambiente
               cat <<EOT > .env
-              DATABASE_URL=postgresql://adminuser:SenhaSuperSegura123!@auth-postgres-dev.xxxxxx.us-east-1.rds.amazonaws.com:5432/authdb?schema=public
+              DATABASE_URL=postgresql://auth_user:auth_password@postgres:5432/auth_db?schema=public
               REDIS_HOST=redis
               REDIS_PORT=6379
               JWT_ISSUER=http://$PUBLIC_IP:3000/authentication_api/api/v1/auth
               APP_URL=https://d1f5n4355y8u52.cloudfront.net
               EMAIL_PROVIDER=ses
-              EMAIL_FROM_ADDRESS=capcodesolucoes@gmail.com
+              EMAIL_FROM_ADDRESS=nao-responda@capcode.com.br
               EOT
 
               # 5. Subir os contêineres via Docker Compose

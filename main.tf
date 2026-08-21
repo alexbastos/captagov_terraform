@@ -21,3 +21,9 @@ variable "environment" {
   default     = "dev"
   description = "Ambiente da aplicação"
 }
+
+variable "github_access_token" {
+  description = "GitHub Personal Access Token para o AWS Amplify Hosting"
+  type        = string
+  sensitive   = true
+}
