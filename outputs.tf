@@ -40,6 +40,6 @@ output "ses_dkim_verification_records" {
 }
 
 output "ec2_frontend_url" {
-  description = "URL do Frontend rodando na mesma EC2"
-  value       = "http://${aws_instance.app_server.public_ip}:3001"
+  description = "URL do Frontend rodando na mesma EC2 (acessível via API Gateway HTTPS)"
+  value       = aws_apigatewayv2_api.http_api.api_endpoint
 }

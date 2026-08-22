@@ -41,7 +41,7 @@ resource "null_resource" "deploy_frontend_ec2" {
       "echo '==> 3. Criando variáveis de ambiente (.env)...'",
       "cat <<EOT > .env",
       "AUTHENTICATION_API_BASE_URL=https://bwtp7pm5pc.execute-api.us-east-1.amazonaws.com",
-      "CAPTAGOV_APP_ORIGIN=http://${aws_instance.app_server.public_ip}:3001",
+      "CAPTAGOV_APP_ORIGIN=${aws_apigatewayv2_api.http_api.api_endpoint}",
       "EOT",
 
       "echo '==> 4. Construindo e subindo o contêiner do Frontend na porta 3001...'",

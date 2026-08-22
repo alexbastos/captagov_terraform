@@ -170,3 +170,18 @@ resource "aws_apigatewayv2_route" "health_route" {
   route_key = "ANY /health/authentication_api"
   target    = "integrations/${aws_apigatewayv2_integration.health_service.id}"
 }
+# =====================================================================
+# 9. Integration: Frontend (Default Route)
+# =====================================================================
+resource "aws_apigatewayv2_integration" "frontend_service" {
+  api_id             = aws_apigatewayv2_api.http_api.id
+  integration_type   = "HTTP_PROXY"
+  integration_uri    = "http://${aws_instance.app_server.public_ip}:3001"
+  integration_method = "ANY"
+}
+
+resource "aws_apigatewayv2_route" "frontend_default_route" {
+  api_id    = aws_apigatewayv2_api.http_api.id
+  route_key = "$default"
+  target    = "integrations/${aws_apigatewayv2_integration.frontend_service.id}"
+}
