@@ -38,9 +38,3 @@ output "ses_dkim_verification_records" {
     }
   ]
 }
-
-
-output "apprunner_service_url" {
-  description = "A URL pública do serviço do App Runner"
-  value       = aws_apprunner_service.frontend.service_url
-}
