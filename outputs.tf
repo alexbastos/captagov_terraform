@@ -38,3 +38,8 @@ output "ses_dkim_verification_records" {
     }
   ]
 }
+
+output "ec2_frontend_url" {
+  description = "URL do Frontend rodando na mesma EC2"
+  value       = "http://${aws_instance.app_server.public_ip}:3001"
+}

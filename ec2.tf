@@ -57,6 +57,14 @@ resource "aws_security_group" "ec2_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Entrada: Porta do Frontend (3001)
+  ingress {
+    from_port   = 3001
+    to_port     = 3001
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   # Saida: Permitir todo tráfego de saída (para baixar imagens docker, clonar git, etc)
   egress {
     from_port   = 0
